@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
-const ease = [0.16, 1, 0.3, 1]
+const ease = [0.16, 1, 0.3, 1] as const
 
 export default function CTASection() {
   const ref    = useRef<HTMLDivElement>(null)

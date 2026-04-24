@@ -5,7 +5,7 @@ import { motion, useInView } from 'framer-motion'
 import { Brain, BarChart3, Layers, Shield, Globe2, Zap, ArrowUpRight } from 'lucide-react'
 import VideoBlock from './VideoBlock'
 
-const ease = [0.16, 1, 0.3, 1]
+const ease = [0.16, 1, 0.3, 1] as const
 
 const CARDS = [
   {

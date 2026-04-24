@@ -4,7 +4,7 @@ import { useRef } from 'react'
 import { motion, useInView } from 'framer-motion'
 import { Quote, Star } from 'lucide-react'
 
-const ease = [0.16, 1, 0.3, 1]
+const ease = [0.16, 1, 0.3, 1] as const
 
 const METRICS = [
   { v: '3.2×', l: 'Average ROI', sub: 'in first year' },
