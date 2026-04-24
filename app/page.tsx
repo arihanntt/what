@@ -1,65 +1,94 @@
-import Image from "next/image";
+'use client'
+
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
+import NavbarV1 from '@/components/NavbarV1'
+import HeroV1 from '@/components/HeroV1'
+import NavbarV2 from '@/components/NavbarV2'
+import HeroV2 from '@/components/HeroV2'
+
+import Portfolio from '@/components/Portfolio'
+import ServicesSection from '@/components/ServicesSection'
+import StatsSection from '@/components/StatsSection'
+import TestimonialsSection from '@/components/TestimonialsSection'
+import IndustriesSection from '@/components/IndustriesSection'
+import FAQ from '@/components/FAQ'
+import Footer from '@/components/Footer'
 
 export default function Home() {
+  const [heroVersion, setHeroVersion] = useState<'v1' | 'v2'>('v1')
+
+  const toggleHero = () => {
+    setHeroVersion(prev => prev === 'v1' ? 'v2' : 'v1')
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <main style={{ background: '#FFFFFF', minHeight: '100vh', position: 'relative' }}>
+      
+      {/* ── VERSION SWITCHER BUTTON ── */}
+      <button 
+        onClick={toggleHero}
+        style={{
+          position: 'fixed', bottom: 32, right: 32, zIndex: 9999,
+          padding: '12px 24px', borderRadius: 100,
+          background: 'rgba(20, 20, 25, 0.95)', 
+          backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255,255,255,0.1)',
+          color: '#FFF', fontSize: 13, fontWeight: 700, letterSpacing: '0.05em',
+          textTransform: 'uppercase', cursor: 'pointer',
+          boxShadow: '0 20px 40px rgba(0,0,0,0.3), inset 0 2px 0 rgba(255,255,255,0.05)',
+          display: 'flex', alignItems: 'center', gap: 12,
+          transition: 'transform 0.2s, background 0.2s'
+        }}
+        onMouseEnter={e => {
+          e.currentTarget.style.transform = 'translateY(-4px) scale(1.02)'
+          e.currentTarget.style.background = 'rgba(40, 40, 50, 0.95)'
+        }}
+        onMouseLeave={e => {
+          e.currentTarget.style.transform = 'translateY(0) scale(1)'
+          e.currentTarget.style.background = 'rgba(20, 20, 25, 0.95)'
+        }}
+      >
+        <div style={{ width: 8, height: 8, borderRadius: '50%', background: heroVersion === 'v1' ? '#6D28D9' : '#10B981', boxShadow: heroVersion === 'v1' ? '0 0 10px #6D28D9' : '0 0 10px #10B981' }} />
+        {heroVersion === 'v1' ? 'Try Premium UI' : 'Back to Original'}
+      </button>
+
+      {/* ── SMOOTH A/B HERO TRANSITION ── */}
+      <AnimatePresence mode="wait">
+        {heroVersion === 'v1' ? (
+          <motion.div 
+            key="v1"
+            initial={{ opacity: 0, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, filter: 'blur(10px)' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+            <NavbarV1 />
+            <HeroV1 />
+          </motion.div>
+        ) : (
+          <motion.div 
+            key="v2"
+            initial={{ opacity: 0, filter: 'blur(10px)' }}
+            animate={{ opacity: 1, filter: 'blur(0px)' }}
+            exit={{ opacity: 0, filter: 'blur(10px)' }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
           >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+            <NavbarV2 />
+            <HeroV2 />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <StatsSection />
+      <ServicesSection />
+      <Portfolio />
+      <TestimonialsSection />
+      <IndustriesSection />
+      <FAQ />
+      <Footer />
+    </main>
+  )
 }
+
