@@ -82,7 +82,7 @@ const CardSwap = ({
   const order = useRef(Array.from({ length: childArr.length }, (_, i) => i));
 
   const tlRef = useRef<gsap.core.Timeline | null>(null);
-  const intervalRef = useRef<number>();
+  const intervalRef = useRef<number | undefined>(undefined);
   const container = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -154,7 +154,7 @@ const CardSwap = ({
       const node = container.current;
       const pause = () => {
         tlRef.current?.pause();
-        clearInterval(intervalRef.current);
+        clearInterval(intervalRef.current ?? undefined);
       };
       const resume = () => {
         tlRef.current?.play();
@@ -168,23 +168,23 @@ const CardSwap = ({
         clearInterval(intervalRef.current);
       };
     }
-    return () => clearInterval(intervalRef.current);
+    return () => clearInterval(intervalRef.current as number);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cardDistance, verticalDistance, delay, pauseOnHover, skewAmount, easing]);
 
-  const rendered = childArr.map((child, i) =>
-    isValidElement(child)
-      ? cloneElement(child as React.ReactElement<any>, {
-          key: i,
-          ref: refs[i],
-          style: { width, height, ...(child.props.style ?? {}) },
-          onClick: (e: any) => {
-            child.props.onClick?.(e);
-            onCardClick?.(i);
-          }
-        })
-      : child
-  );
+  const rendered = childArr.map((child, i) => {
+    if (!isValidElement(child)) return child
+    const c = child as React.ReactElement<any>
+    return cloneElement(c, {
+      key: i,
+      ref: refs[i],
+      style: { width, height, ...(c.props.style ?? {}) },
+      onClick: (e: any) => {
+        c.props.onClick?.(e)
+        onCardClick?.(i)
+      },
+    })
+  })
 
   return (
     <div ref={container} className="card-swap-container" style={{ width, height }}>

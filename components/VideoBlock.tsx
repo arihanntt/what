@@ -14,7 +14,7 @@ interface VideoBlockProps {
 export default function VideoBlock({ label = 'Product Demo', delay = 0, style = {}, noAspect = false }: VideoBlockProps) {
   const ref    = useRef<HTMLDivElement>(null)
   const inView = useInView(ref, { once: true, margin: '-8%' })
-  const ease   = [0.16, 1, 0.3, 1]
+  const ease   = [0.16, 1, 0.3, 1] as const
 
   return (
     <motion.div

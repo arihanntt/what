@@ -48,12 +48,12 @@ const CURVE_FUNCTIONS: any = {
 
 const mergeConfigs = (...configs: any[]) => configs.reduce((acc, c) => ({ ...acc, ...c }), {});
 const getGradientDirection = (position: string) =>
-  ({
+  (({
     top: 'to top',
     bottom: 'to bottom',
     left: 'to left',
     right: 'to right'
-  })[position as keyof typeof PRESETS] || 'to bottom';
+  } as Record<string, string>)[position]) || 'to bottom';
 
 const debounce = (fn: Function, wait: number) => {
   let t: any;
@@ -149,17 +149,17 @@ function GradualBlurComponent(props: GradualBlurProps) {
       let progress = i / config.divCount;
       progress = curveFunc(progress);
 
-      let blurValue: any;
+      let blurValue: number;
       if (config.exponential) {
-        blurValue = math.pow(2, progress * 4) * 0.0625 * currentStrength;
+        blurValue = (Number(math.pow(2, progress * 4))) * 0.0625 * currentStrength;
       } else {
         blurValue = 0.0625 * (progress * config.divCount + 1) * currentStrength;
       }
 
-      const p1 = math.round((increment * i - increment) * 10) / 10;
-      const p2 = math.round(increment * i * 10) / 10;
-      const p3 = math.round((increment * i + increment) * 10) / 10;
-      const p4 = math.round((increment * i + increment * 2) * 10) / 10;
+      const p1 = Number(math.round((increment * i - increment) * 10)) / 10;
+      const p2 = Number(math.round(increment * i * 10)) / 10;
+      const p3 = Number(math.round((increment * i + increment) * 10)) / 10;
+      const p4 = Number(math.round((increment * i + increment * 2) * 10)) / 10;
 
       let gradient = `transparent ${p1}%, black ${p2}%`;
       if (p3 <= 100) gradient += `, black ${p3}%`;
